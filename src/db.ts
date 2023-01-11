@@ -1,11 +1,4 @@
-/*
- * The shortSchema function generates an abbreviated description of the tables and columns in a PostgreSQL database.
- * It also includes foreign key constraints in the descriptions. The following is an eample of the output for the city table.
- * city (city_id, city, country_id, last_update constr (fkey (country_id) refer pagila(country_pkey))
- * The function returns a promise that resolves to an string containing the abbreviated descriptions.
- */
-
-import {Pool, Client} from 'pg';
+import {Client} from 'pg';
 
 export class DB {
   client: any;
@@ -42,18 +35,25 @@ export class DB {
       // client.release(); //TODO check that we get here on error
     }
   }
-  async shortSchema() {
 
+  /*
+   * The shortSchema function generates an abbreviated description of the tables and columns in a PostgreSQL database.
+   * It also includes foreign key constraints in the descriptions. The following is an eample of the output for the city table.
+   * city (city_id, city, country_id, last_update constr (fkey (country_id) refer pagila(country_pkey))
+   * The function returns a promise that resolves to an string containing the abbreviated descriptions.
+   */
+
+  async shortSchema() {
     const tableQuery = `
-    SELECT c.table_name, c.column_name, c.data_type, fk.constraint_name, fk.unique_constraint_name, fk.unique_constraint_catalog
-    FROM information_schema.columns c
-    LEFT JOIN information_schema.key_column_usage kcu
-      ON c.table_name = kcu.table_name AND c.column_name = kcu.column_name
-    LEFT JOIN information_schema.referential_constraints fk
-      ON kcu.constraint_name = fk.constraint_name
-    WHERE c.table_schema = 'public'
-    ORDER BY c.table_name, c.ordinal_position;
-  `;
+		SELECT c.table_name, c.column_name, c.data_type, fk.constraint_name, fk.unique_constraint_name, fk.unique_constraint_catalog
+		FROM information_schema.columns c
+		LEFT JOIN information_schema.key_column_usage kcu
+			ON c.table_name = kcu.table_name AND c.column_name = kcu.column_name
+		LEFT JOIN information_schema.referential_constraints fk
+			ON kcu.constraint_name = fk.constraint_name
+		WHERE c.table_schema = 'public'
+		ORDER BY c.table_name, c.ordinal_position;
+	`;
 
     const res = await this.client.query(tableQuery);
 
@@ -98,8 +98,6 @@ export class DB {
       currentDescription += ` ${currentConstraints}`;
     }
     descriptions.push(currentDescription);
-
-    // await this.client.end();
 
     return descriptions.join('\n');
   }

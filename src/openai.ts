@@ -15,8 +15,20 @@ export class GPT {
         prompt: query,
         max_tokens: 1000,
       });
-      return(completion.data.choices[0].text);
-    } catch (error: any) {
+      console.log(completion.data);
+      /*
+       *  data: {
+       * id: 'cmpl-6XKRMiJZifNtJuP29w34AXw7ZfkX5',
+       * object: 'text_completion',
+       * created: 1673401416,
+       * model: 'text-davinci-003',
+       * choices: [ [Object] ],
+       * usage: { prompt_tokens: 254, completion_tokens: 23, total_tokens: 277 }
+       * }
+       */
+
+      return completion.data;
+    } catch (error) {
       if (error.response) {
         console.log(error.response.status);
         console.log(error.response.data);

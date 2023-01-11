@@ -14,12 +14,11 @@ export async function displayQueryResult(rows: any[]) {
 
   // Add rows to the table
   rows.forEach(row => {
-    // console.log('push', row);
-    const values = head.map(key => row[key]);
+    const values = head.map(key => row[key] || '');
     table.push(values);
   });
+  // console.log('table', table);
 
   // Output the table to the terminal
-  console.log(table.toString());
+  return table.toString();
 }
-
