@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import * as os from 'os';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -12,7 +13,6 @@ const {spawn} = require('child_process');
 import {DB} from './db';
 import {displayQueryResult} from './displayQueryResult';
 import {GPT} from './openai';
-import {NlpCloud} from './nlpcloud';
 import {settings} from './settings';
 
 let log = console.log;
@@ -23,7 +23,7 @@ const completer = (line: string) => {
   // Show all completions if none found
   return [hits.length ? hits : completions, line];
 };
-const fname = 'prompts/pagila';
+const fname = 'prompts/pagila2';
 
 const background = fs.readFileSync(fname, 'utf-8');
 if (!('LESS' in process.env)) {
@@ -36,7 +36,6 @@ class RIA {
   histPath: string = '';
   schema: string = '';
   gpt = new GPT();
-  nlpCloud = new NlpCloud();
   db = new DB();
 
   constructor() {
@@ -45,8 +44,10 @@ class RIA {
 
   async init() {
     this.schema = await this.db.shortSchema();
+    // console.log(this.schema);
 
-    // console.log(schema);
+    const tables = await this.db.getTables();
+    // console.log(tables);
 
     const histName = '.ria_hist';
     const homeDir = os.homedir();
@@ -164,9 +165,11 @@ class RIA {
 					usage: { prompt_tokens: 254, completion_tokens: 15, total_tokens: 269 }
 				}
        */
-      console.log(gptResult.choices[0].text);
-      console.log('Tokens used:', gptResult.usage.total_tokens);
-      this.log(fullRequest, gptResult);
+      // console.log(gptResult.choices[0].text);
+      const tokens = gptResult.usage.total_tokens;
+      console.log(
+        `Tokens used:', ${tokens}, price: ${(tokens * 0.002) / 1000}`,
+      );
       return gptResult.choices[0].text;
 
       // rows = await this.db.runQuery(gptResult as string);
@@ -186,18 +189,20 @@ class RIA {
     try {
       // log('fullRequest:', fullRequest);
       gptResult = await this.gpt.fetch(fullRequest);
-      const query = gptResult.choices[0].text;
-      console.log('Tokens used:', gptResult.usage.total_tokens);
-      log('gptResult:', query);
-
+      const query = gptResult.choices[0].message['content'];
+      const tokens = gptResult.usage.total_tokens;
+      console.log(
+        `Tokens used:', ${tokens}, price: ${(tokens * 0.002) / 1000}`,
+      );
+      console.log(`query: ${query}`);
       rows = await this.db.runQuery(query as string);
+      const out = await displayQueryResult(rows);
+      //console.log(rows);
+      this.lessView(out);
+      this.log(userRequest, gptResult);
     } catch (err) {
       log(err);
     }
-    //console.log(rows);
-    const out = await displayQueryResult(rows);
-    //    this.lessView(out);
-    this.log(userRequest, gptResult);
   }
   /**
    * Log the requests and responses to file

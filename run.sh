@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e # fail on error
 source ~/.cdbfly # for database credentials
 source ~/.openai # for GPT credentials
 export PGUSER=authenticator

@@ -10,12 +10,19 @@ export class GPT {
 
   async fetch(query: string) {
     try {
+      // console.log(query);
+      const completion = await this.openai.createChatCompletion({
+        model: 'gpt-3.5-turbo',
+        messages: [{role: 'user', content: query}],
+      });
+      /*
       const completion = await this.openai.createCompletion({
         model: 'text-davinci-003',
+        model: 'gpt-3.5-turbo',
         prompt: query,
         max_tokens: 1000,
       });
-      console.log(completion.data);
+      */
       /*
        *  data: {
        * id: 'cmpl-6XKRMiJZifNtJuP29w34AXw7ZfkX5',
