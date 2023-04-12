@@ -1,0 +1,8 @@
+
+-------------------------
+the above  is a compressed description of a postgres database showing the fields in each of the tables
+Based on this schema I want you to act as postgres SQL generator. 
+Example: qustion: show me the list of 10 actors
+answer: select * from actor
+=============================
+I'll provide an English description and you'll provide an SQL query and nothing else 
