@@ -1,6 +1,6 @@
-# DANI: Database and Natural-Language Interface
+# Ria GPT natural language interface to Postgres
 
-Dani is a tool that allows you to easily query a database using natural language. Simply enter your request in English , and Dani will translate your request into a SQL query, run the query, and return the results to you.
+Ria, Relational Information Assistant, is a tool that allows you to easily query a database using natural language. Simply enter your request in English , and Dani will translate your request into a SQL query, run the query, and return the results to you.
 
 ## Installation
 
@@ -24,7 +24,7 @@ Dani is a tool that allows you to easily query a database using natural language
 
 ## Requirements
 
-- A postgres database that Dani can connect to and query
+- A postgres database that RIA can connect to and query
 - Access to a GPT type of engine:
   - An openAI account
 
@@ -40,10 +40,12 @@ Dani is a tool that allows you to easily query a database using natural language
 
 ## Examples
 
-Here are a few examples of requests you can make to Dani with the [Pagila database](https://github.com/devrimgunduz/pagila):
+Here are a few examples of requests you can make to RIA with the [Pagila database](https://github.com/devrimgunduz/pagila):
 
 - Show me all customers from New York
 - List the names and email addresses of all customers who have placed an order in the past month
 - How many orders were placed in the past year?
 
-## Additional Resources
+# How it works
+
+The core of RIA is the shortSchema function. It creates an abreviated version of the db schema that GPT understands, while consuming less tokens. The rest, is just a standard prompt to ask GPT to convert the request to SQL.
