@@ -6,4 +6,4 @@ export PGUSER=authenticator
 export PGHOST=localhost
 export PGPASSWORD=${CDBFLY_PASS}
 export PGDATABASE=pagila
-npm run dev
+npm run prod
