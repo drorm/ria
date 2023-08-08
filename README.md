@@ -1,6 +1,6 @@
 # Ria GPT natural language interface to Postgres
 
-Ria, Relational Information Assistant, is a CLI that allows you to easily query a database using natural language. Simply enter your request in English , and Dani will translate your request into a SQL query, run the query, and return the results to you.
+Ria, Relational Information Assistant, is a CLI that allows you to easily query a database using natural language. Simply enter your request in English , and RIA will translate your request into a SQL query, run the query, and return the results to you.
 
 ## Installation
 
